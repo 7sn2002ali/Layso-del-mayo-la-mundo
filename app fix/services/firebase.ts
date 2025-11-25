@@ -1,29 +1,28 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-// Your actual Firebase configuration
+// TODO: REPLACE THIS WITH YOUR FIREBASE CONFIG FROM THE CONSOLE
+// Go to Firebase Console -> Project Settings -> General -> Your Apps -> SDK Setup and Config
 const firebaseConfig = {
-  apiKey: "AIzaSyBYjq_lz8yJN1JN7jQiAPjubm-qf1hCSY0",
-  authDomain: "database-del-layso.firebaseapp.com",
-  databaseURL: "https://database-del-layso-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "database-del-layso",
-  storageBucket: "database-del-layso.firebasestorage.app",
-  messagingSenderId: "307917416298",
-  appId: "1:307917416298:web:08e8e4ff35fd2db003e713",
-  measurementId: "G-5YD9XDBD99"
+  apiKey: "YOUR_API_KEY_HERE",
+  authDomain: "your-project.firebaseapp.com",
+  projectId: "your-project-id",
+  storageBucket: "your-project.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdef"
 };
 
 let db: any = null;
 
 try {
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  
-  // Initialize Cloud Firestore and get a reference to the service
-  db = getFirestore(app);
-  
-  console.log("Firebase initialized successfully");
-
+  // We check if the config is still the placeholder to avoid crashing immediately
+  if (firebaseConfig.apiKey !== "YOUR_API_KEY_HERE") {
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    console.log("Firebase initialized successfully");
+  } else {
+    console.warn("Firebase Config missing. Running in Offline/Demo Mode.");
+  }
 } catch (error) {
   console.error("Error initializing Firebase:", error);
 }
