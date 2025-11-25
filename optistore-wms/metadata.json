@@ -1,0 +1,5 @@
+{
+  "name": "OptiStore WMS",
+  "description": "Intelligent Warehouse Management System with FIFO enforcement, managing 56 racks with 5 levels each, powered by Gemini AI for insights.",
+  "requestFramePermissions": []
+}
