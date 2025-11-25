@@ -1,0 +1,102 @@
+            - name: branch-deploy
+  uses: github/branch-deploy@v11.1.1
+  with:
+    # The GitHub token used to create an authenticated client - Provided for you by default!
+    github_token: # default is ${{ github.token }}
+    # The status of the GitHub Actions - For use in the post run workflow - Provided for you by default!
+    status: # default is ${{ job.status }}
+    # The name of the default environment to deploy to. Example: by default, if you type `.deploy`, it will assume "production" as the default environment
+    environment: # optional, default is production
+    # Optional (or additional) target environments to select for use with deployments. Example, "production,development,staging". Example  usage: `.deploy to development`, `.deploy to production`, `.deploy to staging`
+    environment_targets: # optional, default is production,development,staging
+    # Optional environments which can allow "draft" pull requests to be deployed. By default, this input option is empty and no environments allow deployments sourced from a pull request in a "draft" state. Examples: "development,staging"
+    draft_permitted_targets: # optional, default is 
+    # Optional target environment URLs to use with deployments. This input option is a mapping of environment names to URLs and the environment names must match the "environment_targets" input option. This option is a comma separated list with pipes (|) separating the environment from the URL. Note: "disabled" is a special keyword to disable an environment url if you enable this option. Format: "<environment1>|<url1>,<environment2>|<url2>,etc" Example: "production|https://myapp.com,development|https://dev.myapp.com,staging|disabled"
+    environment_urls: # optional, default is 
+    # If the environment_url detected in the deployment should be appended to the successful deployment comment or not. Examples: "true" or "false"
+    environment_url_in_comment: # optional, default is true
+    # A comma separated list of environments that should be treated as "production". GitHub defines "production" as an environment that end users or systems interact with. Example: "production,production-eu". By default, GitHub will set the "production_environment" to "true" if the environment name is "production". This option allows you to override that behavior so you can use "prod", "prd", "main", "production-eu", etc. as your production environment name. ref: https://github.com/github/branch-deploy/issues/208
+    production_environments: # optional, default is production
+    # If set, the specified emoji "reaction" is put on the comment to indicate that the trigger was detected. For example, "rocket" or "eyes"
+    reaction: # optional, default is eyes
+    # The string to look for in comments as an IssueOps trigger. Example: ".deploy"
+    trigger: # optional, default is .deploy
+    # The string to look for in comments as an IssueOps noop trigger. Example: ".noop"
+    noop_trigger: # optional, default is .noop
+    # The string to look for in comments as an IssueOps lock trigger. Used for locking branch deployments on a specific branch. Example: ".lock"
+    lock_trigger: # optional, default is .lock
+    # The string to look for in comments as an IssueOps unlock trigger. Used for unlocking branch deployments. Example: ".unlock"
+    unlock_trigger: # optional, default is .unlock
+    # The string to look for in comments as an IssueOps help trigger. Example: ".help"
+    help_trigger: # optional, default is .help
+    # An alias or shortcut to get details about the current lock (if it exists) Example: ".info"
+    lock_info_alias: # optional, default is .wcid
+    # The allowed GitHub permissions an actor can have to invoke IssueOps commands - Example: "write,admin"
+    permissions: # default is write,admin
+    # Whether or not to enforce commit verification before a deployment can continue. Default is "false"
+    commit_verification: # optional, default is false
+    # The separator to use for parsing parameters in comments in deployment requests. Parameters will are saved as outputs and can be used in subsequent steps
+    param_separator: # optional, default is |
+    # The flag to pass into the lock command to lock all environments. Example: "--global"
+    global_lock_flag: # optional, default is --global
+    # The name of a stable branch to deploy to (rollbacks). Example: "main"
+    stable_branch: # optional, default is main
+    # Determine how you want this Action to handle "out-of-date" branches. Available options: "disabled", "warn", "force". "disabled" means that the Action will not care if a branch is out-of-date. "warn" means that the Action will warn the user that a branch is out-of-date and exit without deploying. "force" means that the Action will force update the branch. Note: The "force" option is not recommended due to Actions not being able to re-run CI on commits originating from Actions itself
+    update_branch: # optional, default is warn
+    # The mode to use for determining if a branch is up-to-date or not before allowing deployments. This option is closely related to the "update_branch" input option above. There are three available modes to choose from "pr_base", "default_branch", or "strict". The default is "strict" to help ensure that deployments are using the most up-to-date code. Please see the docs/outdated_mode.md document for more details.
+    outdated_mode: # optional, default is strict
+    # Manually enforce commit status checks before a deployment can continue. Only use this option if you wish to manually override the settings you have configured for your branch protection settings for your GitHub repository. Default is "false" - Example value: "context1,context2,context3" - In most cases you will not need to touch this option
+    required_contexts: # optional, default is false
+    # A comma separated list of environments that will not use passing CI as a requirement for deployment. Use this option to explicitly bypass branch protection settings for a certain environment in your repository. Default is an empty string "" - Example: "development,staging"
+    skip_ci: # optional, default is 
+    # This input defines how the branch-deploy Action will handle the status of CI checks on your PR/branch before deployments can continue. `"all"` requires that all CI checks must pass in order for a deployment to be triggered. `"required"` only waits for required CI checks to be passing. You can also pass in the names of your CI jobs in a comma separated list. View the documentation (docs/checks.md) for more details.
+    checks: # optional, default is all
+    # A comma separated list of checks that will be ignored when determining if a deployment can continue. This setting allows you to skip failing, pending, or incomplete checks regardless of the `checks` setting above. Example: "lint,markdown-formatting,update-pr-label". View the documentation (docs/checks.md) for more details.
+    ignored_checks: # optional, default is 
+    # A comma separated list of environment that will not use reviews/approvals as a requirement for deployment. Use this options to explicitly bypass branch protection settings for a certain environment in your repository. Default is an empty string "" - Example: "development,staging"
+    skip_reviews: # optional, default is 
+    # Allow branch deployments to run on repository forks. If you want to harden your workflows, this option can be set to false. Default is "true"
+    allow_forks: # optional, default is true
+    # A comma separated list of GitHub usernames or teams that should be considered admins by this Action. Admins can deploy pull requests without the need for branch protection approvals. Example: "monalisa,octocat,my-org/my-team"
+    admins: # optional, default is false
+    # A GitHub personal access token with "read:org" scopes. This is only needed if you are using the "admins" option with a GitHub org team. For example: "my-org/my-team"
+    admins_pat: # optional, default is false
+    # This is an advanced option that is an alternate workflow bundled into this Action. You can control how merge commits are handled when a PR is merged into your repository's default branch. If the merge commit SHA matches the latest deployment for the same environment, then the 'continue' output will be set to 'false' which indicates that a deployment should not be performed again as the latest deployment is identical. If the merge commit SHA does not match the latest deployment for the same environment, then the 'continue' output will be set to 'true' which indicates that a deployment should be performed. With this option, the 'environment' output is also set for subsequent steps to reference
+    merge_deploy_mode: # optional, default is false
+    # This is an advanced option that is an alternate workflow bundled into this Action. You can optionally use this mode in a custom workflow to automatically release all locks that came from a pull request when the pull request is merged. This is useful if you want to ensure that locks are not left behind when a pull request is merged.
+    unlock_on_merge_mode: # optional, default is false
+    # If set to "true", skip the process of completing a deployment. You must manually create a deployment status after the deployment is complete. Default is "false"
+    skip_completing: # optional, default is false
+    # The path to a markdown file which is used as a template for custom deployment messages. Example: ".github/deployment_message.md"
+    deploy_message_path: # optional, default is .github/deployment_message.md
+    # If set to "true", locks will not be released after a deployment run completes. This applies to both successful, and failed deployments.Sticky locks are also known as "hubot style deployment locks". They will persist until they are manually released by a user, or if you configure another workflow with the "unlock on merge" mode to remove them automatically on PR merge.
+    sticky_locks: # optional, default is false
+    # If set to "true", then sticky_locks will also be used for noop deployments. This can be useful in some cases but it often leads to locks being left behind when users test noop deployments.
+    sticky_locks_for_noop: # optional, default is false
+    # If set to "true", then you can deploy a specific sha instead of a branch. Example: ".deploy 1234567890abcdef1234567890abcdef12345678 to production" - This is dangerous and potentially unsafe, view the docs to learn more: https://github.com/github/branch-deploy/blob/main/docs/sha-deployments.md
+    allow_sha_deployments: # optional, default is false
+    # If set to "true", then naked commands will be disabled. Example: ".deploy" will not trigger a deployment. Instead, you must use ".deploy to production" to trigger a deployment. This is useful if you want to prevent accidental deployments from happening. Read more about naked commands here: https://github.com/github/branch-deploy/blob/main/docs/naked-commands.md
+    disable_naked_commands: # optional, default is false
+    # A comma separated list of labels to add to the pull request when a deployment is successful. Example: "deployed,success"
+    successful_deploy_labels: # optional, default is 
+    # A comma separated list of labels to add to the pull request when a noop deployment is successful. Example: "noop,success"
+    successful_noop_labels: # optional, default is 
+    # A comma separated list of labels to add to the pull request when a deployment fails. Example: "failed,deploy-failed"
+    failed_deploy_labels: # optional, default is 
+    # A comma separated list of labels to add to the pull request when a noop deployment fails. Example: "failed,noop-failed"
+    failed_noop_labels: # optional, default is 
+    # Whether or not the post run logic should skip adding successful noop labels if the pull request is approved. This can be useful if you add a label such as "ready-for-review" after a .noop completes but want to skip adding that label in situations where the pull request is already approved.
+    skip_successful_noop_labels_if_approved: # optional, default is false
+    # Whether or not the post run logic should skip adding successful deploy labels if the pull request is approved. This can be useful if you add a label such as "ready-for-review" after a .deploy completes but want to skip adding that label in situations where the pull request is already approved.
+    skip_successful_deploy_labels_if_approved: # optional, default is false
+    # A comma separated list of environments that must be deployed in a specific order. Example: `"development,staging,production"`. If this is set then you cannot deploy to latter environments unless the former ones have a successful and active deployment on the latest commit first.
+    enforced_deployment_order: # optional, default is 
+    # Whether or not to leave security related warnings in log messages during deployments. Default is "true"
+    use_security_warnings: # optional, default is true
+    # Whether or not to allow deployments of pull requests that target a branch other than the default branch (aka stable branch) as their merge target. By default, this Action would reject the deployment of a branch named "feature-branch" if it was targeting "foo" instead of "main" (or whatever your default branch is). This option allows you to override that behavior and be able to deploy any branch in your repository regardless of the target branch. This option is potentially unsafe and should be used with caution as most default branches contain branch protection rules. Often times non-default branches do not contain these same branch protection rules. Follow along in this issue thread to learn more https://github.com/github/branch-deploy/issues/340
+    allow_non_default_target_branch_deployments: # optional, default is false
+    # Whether or not to require an additional confirmation before a deployment can continue. Default is "false". If your project requires elevated security, it is highly recommended to enable this option - especially in open source projects where you might be deploying forks. docs/deployment-confirmation.md
+    deployment_confirmation: # optional, default is false
+    # The number of seconds to wait for a deployment confirmation before timing out. Default is "60" seconds (1 minute).
+    deployment_confirmation_timeout: # optional, default is 60
+          
